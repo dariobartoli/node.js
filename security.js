@@ -1,8 +1,8 @@
 console.log("hola mundo");
 
-let muy_segura = /(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[!@#·$%&/()=?¿¡])\S[a-zA-Z\d!@#·$%&/()=?¿¡]{8,16}/
-let segura = /(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])\S[a-zA-Z\d]{8,16}/
-let insegura = /(?=.*[a-z])(?=.*[\d])\S[a-z\d]{8,16}/
+let muy_segura = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])(?=.*[!@#·$%&/()=?¿¡])\S[a-zA-Z\d!@#·$%&/()=?¿¡]{8,16}$/
+let segura = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])\S[a-zA-Z\d]{8,16}$/
+let insegura = /^(?=.*[a-z])(?=.*[\d])\S[a-z\d]{8,16}$/
 
 const prompt = require('prompt-sync')()
  
@@ -18,20 +18,20 @@ function password(){
     let medio = segura.test(pass)
     let debil = insegura.test(pass)
     if (pass.length < 8) {
-        console.log("su contraseña debe ser mayor a 8 caracteres y menor a 16 caracteres");
+        return console.log("su contraseña debe ser mayor a 8 caracteres y menor a 16 caracteres");
     }else if(pass.length > 16){
-        console.log("su contraseña debe ser mayor a 8 caracteres y menor a 16 caracteres")
+        return console.log("su contraseña debe ser mayor a 8 caracteres y menor a 16 caracteres")
     }else{
         if (fuerte == true) {
-            console.log("su contraseña es muy segura");
+            return console.log("su contraseña es muy segura");
         }
         if (medio == true) {
-            console.log("su contraseña no es tan segura");
+            return console.log("su contraseña no es tan segura");
         }
         if (debil == true) {
-            console.log("su contraseña no es muy segura");
+            return console.log("su contraseña no es muy segura");
         }else{
-            console.log("su contraseña debe tener al menos un numero y una minuscula");
+            return console.log("su contraseña debe tener al menos un numero y una minuscula");
         }
     }
 }
