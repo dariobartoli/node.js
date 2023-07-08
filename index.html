@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="/styles/rubik.css">
+</head>
+<body>
+    <div id="app">
+        <h1>{{probando}}</h1>
+        <div class="container_rubik">
+            <section class="top">
+                <h3>Superior</h3>
+                <div class="container_lado">
+                    <div v-for="lado of cubo.top" :class="{ladoNegro: lado == 'negro', ladoBlanco: lado == 'blanco', ladoAzul: lado == 'azul', ladoVerde: lado == 'verde', ladoNaranja: lado == 'naranja', ladoRojo: lado == 'rojo'}" :value={lado} class="square">
+                        {{lado}}
+                    </div>
+                </div>
+            </section>
+            <section class="central">
+                <div class="central_container">
+                    <h3>Izquierda</h3>
+                    <div class="container_lado">
+                        <div v-for="lado of cubo.lateralIzq" :class="{ladoNegro: lado == 'negro', ladoBlanco: lado == 'blanco', ladoAzul: lado == 'azul', ladoVerde: lado == 'verde', ladoNaranja: lado == 'naranja', ladoRojo: lado == 'rojo'}" :value={lado} class="square">
+                            {{lado}}
+                        </div>
+                    </div>
+                </div>
+                <div class="central_container">
+                    <h3>Frente</h3>
+                    <div class="container_lado">
+                        <div v-for="lado of cubo.frontal" :class="{ladoNegro: lado == 'negro', ladoBlanco: lado == 'blanco', ladoAzul: lado == 'azul', ladoVerde: lado == 'verde', ladoNaranja: lado == 'naranja', ladoRojo: lado == 'rojo'}" :value={lado} class="square">
+                            {{lado}}
+                        </div>
+                    </div>
+                </div>
+                <div class="central_container">
+                    <h3>Derecha</h3>
+                    <div class="container_lado">
+                        <div v-for="lado of cubo.lateralDer" :class="{ladoNegro: lado == 'negro', ladoBlanco: lado == 'blanco', ladoAzul: lado == 'azul', ladoVerde: lado == 'verde', ladoNaranja: lado == 'naranja', ladoRojo: lado == 'rojo'}" :value={lado} class="square">
+                            {{lado}}
+                        </div>
+                    </div>
+                </div>
+                <div class="central_container">
+                    <h3>Detrás</h3>
+                    <div class="container_lado">
+                        <div v-for="lado of cubo.detras" :class="{ladoNegro: lado == 'negro', ladoBlanco: lado == 'blanco', ladoAzul: lado == 'azul', ladoVerde: lado == 'verde', ladoNaranja: lado == 'naranja', ladoRojo: lado == 'rojo'}" :value={lado} class="square">
+                            {{lado}}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="bottom">    
+                <h3>Inferior</h3>
+                <div class="container_lado">
+                    <div v-for="lado of cubo.bottom" :class="{ladoNegro: lado == 'negro', ladoBlanco: lado == 'blanco', ladoAzul: lado == 'azul', ladoVerde: lado == 'verde', ladoNaranja: lado == 'naranja', ladoRojo: lado == 'rojo'}" :value={lado} class="square">
+                        {{lado}}
+                    </div>
+                </div>
+            </section>
+            <button @click="abajoDer()">abajo derecha</button>
+            <button @click="abajoIzq()">abajo izquierda</button>
+            <button @click="arribaIzq()">arriba izquierda</button>
+            <button @click="arribaDer()">arriba derecha</button>
+            <button @click="lateralDerechoAbajo()">lateral derecho abajo</button>
+            <button @click="lateralDerechoArriba()">lateral derecho arriba</button>
+            <button @click="lateralIzquierdoAbajo()">lateral izquierdo abajo</button>
+            <button @click="lateralIzquierdoArriba()">lateral izquierdo arriba</button>
+        </div>
+
+    </div>
+    
+
+
+    <script src="/rubik.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</body>
+</html>
