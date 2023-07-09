@@ -2,14 +2,18 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* Crea 3 columnas iguales */
     grid-template-rows: repeat(3, 1fr); /* Crea 3 filas iguales */
-    gap: 1px; /* Espacio entre los elementos */
+    gap: 3px; /* Espacio entre los elementos */
     width: 140px;
+    border: 1px solid rgb(145, 145, 145);
+    padding: 10px;
+    padding-right: 18px;
+    border-radius: 10px;
+    background-color: rgb(207, 207, 207);
 }
 
 .container_rubik{
     display: flex;
     flex-direction: column;
-    gap: 3rem;
 }
 
 .top, .bottom{
@@ -23,7 +27,7 @@
     display: flex;
     justify-content: center;
     gap: 2rem;
-    margin-left: 10.8rem;
+    margin-left: 13rem;
 }
 
 .central_container{
@@ -35,30 +39,85 @@
 
 .ladoNegro{
     background-color: black;
+    color: black;
 }
 
 .ladoAzul{
     background-color: blue;
+    color: blue;
 }
 
 .ladoBlanco{
     background-color: white;
+    color: white;
 }
 
 .ladoVerde{
     background-color: green;
+    color: green;
 }
 
 .ladoNaranja{
     background-color: orange;
+    color: orange;
 }
 
 .ladoRojo{
     background-color: Red;
+    color: red;
 }
 
 .square{
     width: 45px;
     height: 45px;
-    border: 1px solid rgb(163, 163, 163);
+    border: 1px solid rgb(67, 67, 67);
+    border-radius: 10px;
+}
+
+.contenedor_direcciones_top{
+    padding-top: 1rem;
+    width: 170px;
+    display: flex;
+    justify-content: space-around;
+}
+.contenedor_direcciones_left{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-top: 3rem;
+}
+.contenedor_direcciones_rigth{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-top: 3rem;
+}
+.contenedor_direcciones_bottom{
+    padding-top: 0.5rem;
+    width: 145px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.icon{
+    scale: 1.4;
+    cursor: pointer;
+    transition: 0.5s;
+}
+.icon:hover{
+    scale: 1.8;
+    color: rgb(10, 68, 42);
+    transition: 0.5s;
+}
+
+.iconAleatorio{
+    margin-top: 2rem;
+    scale: 3;
+    cursor: pointer;
+    color: rgb(131, 20, 20);
+    transition: 0.5s;
+}
+.iconAleatorio:hover{
+    scale: 4;
+    transition: 0.5s;
 }

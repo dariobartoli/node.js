@@ -6,20 +6,31 @@
     <title>Document</title>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <link rel="stylesheet" href="/styles/rubik.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
     <div id="app">
-        <h1>{{probando}}</h1>
         <div class="container_rubik">
             <section class="top">
+                <span class="material-symbols-outlined iconAleatorio" @click="aleatorizar()">sync</span>
                 <h3>Superior</h3>
                 <div class="container_lado">
                     <div v-for="lado of cubo.top" :class="{ladoNegro: lado == 'negro', ladoBlanco: lado == 'blanco', ladoAzul: lado == 'azul', ladoVerde: lado == 'verde', ladoNaranja: lado == 'naranja', ladoRojo: lado == 'rojo'}" :value={lado} class="square">
                         {{lado}}
                     </div>
                 </div>
+                <div class="contenedor_direcciones_top">
+                    <span class="material-symbols-outlined icon" @click="lateralIzquierdoArriba()">arrow_upward</span>
+                    <span class="material-symbols-outlined icon" @click="frontalIzquierda()">reply</span>
+                    <span class="material-symbols-outlined icon" @click="frontalDerecha()">forward</span>
+                    <span class="material-symbols-outlined icon" @click="lateralDerechoArriba()">arrow_upward</span>
+                </div>
             </section>
             <section class="central">
+                <div class="contenedor_direcciones_left">
+                    <span class="material-symbols-outlined icon" @click="arribaIzq()">arrow_back</span>
+                    <span class="material-symbols-outlined icon" @click="abajoIzq()">arrow_back</span>
+                </div>
                 <div class="central_container">
                     <h3>Izquierda</h3>
                     <div class="container_lado">
@@ -52,23 +63,27 @@
                         </div>
                     </div>
                 </div>
+                <div class="contenedor_direcciones_rigth">
+                    <span class="material-symbols-outlined icon" @click="arribaDer()">arrow_forward</span>
+                    <span class="material-symbols-outlined icon" @click="abajoDer()">arrow_forward</span>
+                </div>
             </section>
-            <section class="bottom">    
+            <section class="bottom">
+                <div class="contenedor_direcciones_bottom">
+                    <span class="material-symbols-outlined icon" @click="lateralIzquierdoAbajo()">arrow_downward</span>
+                    <span class="material-symbols-outlined icon" @click="lateralDerechoAbajo()">arrow_downward</span>
+                </div>    
                 <h3>Inferior</h3>
                 <div class="container_lado">
                     <div v-for="lado of cubo.bottom" :class="{ladoNegro: lado == 'negro', ladoBlanco: lado == 'blanco', ladoAzul: lado == 'azul', ladoVerde: lado == 'verde', ladoNaranja: lado == 'naranja', ladoRojo: lado == 'rojo'}" :value={lado} class="square">
                         {{lado}}
                     </div>
                 </div>
+                <div class="contenedor_direcciones_bottom">
+                    <span class="material-symbols-outlined icon" @click="detrasIzquierda()">reply</span>
+                    <span class="material-symbols-outlined icon" @click="detrasDerecha()">forward</span>
+                </div>
             </section>
-            <button @click="abajoDer()">abajo derecha</button>
-            <button @click="abajoIzq()">abajo izquierda</button>
-            <button @click="arribaIzq()">arriba izquierda</button>
-            <button @click="arribaDer()">arriba derecha</button>
-            <button @click="lateralDerechoAbajo()">lateral derecho abajo</button>
-            <button @click="lateralDerechoArriba()">lateral derecho arriba</button>
-            <button @click="lateralIzquierdoAbajo()">lateral izquierdo abajo</button>
-            <button @click="lateralIzquierdoArriba()">lateral izquierdo arriba</button>
         </div>
 
     </div>

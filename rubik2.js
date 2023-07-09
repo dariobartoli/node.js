@@ -105,7 +105,6 @@ function lateralDerecho(){
 lateralDerecho()
 
 
-console.log(cubo);
 
   
 
