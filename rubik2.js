@@ -5,7 +5,6 @@ let cubo = {
     lateralDer: ["blanco","blanco","blanco","blanco","blanco","blanco","blanco","blanco","blanco"],
     detras: ["verde","verde","verde","verde","verde","verde","verde","verde","verde"],
     bottom: ["rojo","rojo","rojo","rojo","rojo","rojo","rojo","rojo","rojo"],
-    bot: [1,2,3,4,5,6,7,8,9],
 }
 
 
