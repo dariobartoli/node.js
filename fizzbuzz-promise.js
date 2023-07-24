@@ -21,14 +21,12 @@ if(number <= 0){
 const calculo = (numero) => new Promise((resolve, reject) => {
     if(numero%3 == 0 && numero%5== 0){
         resolve("fizzbuzz");
-    }else if(numero%5== 0){
+    }if(numero%5== 0){
         resolve("buzz");
-    }else if(numero%3 == 0){
+    }if(numero%3 == 0){
         resolve("fizz");
     }
-    else{
-        resolve(numero);
-    }
+    resolve(numero);
     reject("error")
 })
 
