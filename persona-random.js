@@ -34,7 +34,6 @@ const createPerson = (number) => new Promise((resolve, reject) => {
         })
     }
     resolve(personas)
-    reject("ha ocurrido un error")
 })
 
 const personaRandom = async(num) =>{
@@ -42,10 +41,9 @@ const personaRandom = async(num) =>{
         let resultado = await createPerson(num)
         console.log("TODAS LAS PERSONAS GENERADAS: ");
         console.log(resultado);
-        let mayoresDeEdad = resultado.filter(person => person.edad >= 18)
-        let ordenPorEdad = mayoresDeEdad.sort((a,b) => a.edad - b.edad)
+        let mayoresDeEdad = resultado.filter(person => person.edad >= 18).sort((a,b) => a.edad - b.edad)
         console.log("TODAS LAS PERSONAS MAYORES DE 18 AÑOS ORDENADAS: ");
-        console.log(ordenPorEdad);
+        console.log(mayoresDeEdad);
     } catch (error) {
         console.error(error);
     }
