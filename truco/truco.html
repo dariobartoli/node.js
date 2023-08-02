@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truco</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="./truco.css">
+</head>
+<body>
+    <div id="app" >
+        <div class="mainContainer">
+            <div>
+                <div class="cardContainer">
+                    <div v-for="cardP1 in playerOne.cardHand">
+                        <div class="card" >
+                            <p>{{cardP1.number}}</p>
+                            <p>{{cardP1.suit}}</p>
+                        </div>
+                        <button :disabled="game.p1Turn" @click.prevent="viewOptions(cardP1, playerOne)">Seleccionar</button>
+                    </div>
+                    <div v-if="viewOptionP1 == true">
+                        <button @click.prevent="selectCard(cardP1, playerOne)">Jugar Carta</button>
+                        <button @click.prevent="sayTruco(playerOne)" v-if="game.typeTruco == 'nada'">Truco</button>
+                        <button @click.prevent="sayReTruco(playerOne)" v-if="game.typeTruco == 'truco' || game.typeTruco == 'trucoAccept' && playerOne.truco == false">Re Truco</button>
+                        <button @click.prevent="sayVale4(playerOne)" v-if="game.typeTruco == 'reTruco' || game.typeTruco == 'reTrucoAccept' && playerOne.reTruco == false">Quiero vale 4</button>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="cardContainer">
+                <div v-for="cardField in field" class="card">
+                    <p>{{cardField[0].number}}</p>
+                    <p>{{cardField[0].suit}}</p>
+                </div>
+            </div>
+
+    
+            <div>
+                <div class="cardContainer">
+                    <div v-for="cardP2 in playerTwo.cardHand">
+                        <div class="card">
+                            <p>{{cardP2.number}}</p>
+                            <p>{{cardP2.suit}}</p>
+                        </div>
+                        <button :disabled="game.p2Turn" @click.prevent="viewOptions(cardP2, playerTwo)">Seleccionar</button>
+                    </div>
+                    <div v-if="viewOptionP2 == true">
+                        <button @click.prevent="selectCard(cardP2, playerTwo)">Jugar Carta</button>
+                        <button @click.prevent="sayTruco(playerTwo)" v-if="game.typeTruco == 'nada'">Truco</button>
+                        <button @click.prevent="sayReTruco(playerTwo)" v-if="game.typeTruco == 'truco' || game.typeTruco == 'trucoAccept' && playerTwo.truco == false">Re Truco</button>
+                        <button @click.prevent="sayVale4(playerTwo)" v-if="game.typeTruco == 'reTruco' || game.typeTruco == 'reTrucoAccept' && playerTwo.reTruco == false">Quiero vale 4</button>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="trucar1" class="trucarP2">
+                <button @click.prevent="acceptTruco()" v-if="playerOne.truco == true">Quiero</button>
+                <button @click.prevent="acceptReTruco()" v-show="playerOne.reTruco == true">ACEPTAR</button>
+                <button @click.prevent="acceptVale4()" v-show="playerOne.vale4 == true">RE QUIEROOOOOO</button>
+                <button @click.prevent="denyTruco()" v-if="playerOne.truco == true">No Quiero</button>
+                <button @click.prevent="denyReTruco()" v-if="playerOne.reTruco == true">NO QUIEROOOOOOO</button>
+                <button @click.prevent="denyReTruco" v-if="playerOne.vale4 == true">NOOOO ni a palo wey</button>
+            </div>
+
+            <div v-if="trucar2" class="trucarP1">
+                <button @click.prevent="acceptTruco()" v-if="playerTwo.truco == true">Quiero</button>
+                <button @click.prevent="acceptReTruco()" v-show="playerTwo.reTruco == true">ACEPTAR</button>
+                <button @click.prevent="acceptVale4()" v-show="playerTwo.vale4 == true">RE QUIEROOOOOO</button>
+                <button @click.prevent="denyTruco()" v-if="playerTwo.truco == true">No Quiero</button>
+                <button @click.prevent="denyReTruco()" v-if="playerTwo.reTruco == true">NO QUIEROOOOOOO</button>
+                <button @click.prevent="denyReTruco" v-if="playerTwo.vale4 == true">NOOOO ni a palo wey</button>
+            </div>
+
+        </div>
+        <div>
+
+        </div>
+        <div>
+            <button @click.prevent="mix(deck.deck)">Mezclar</button>
+            <button @click.prevent="share(deck.deck)">Repartir</button>
+            <button @click.prevent="changeTypeTruco()">Cambiar tipo</button>
+        </div>
+        {{fieldCheck}}
+        {{gameCheck}}
+        {{playTruco}}
+
+
+
+    </div>
+
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="./truco-vue.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+.mainContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.cardContainer{
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 180px;
+    border: 1px black solid;
+    border-radius: 0.5rem;
+}
+
+.trucarP2{
+    background-color: greenyellow;
+}
+.trucarP1{
+    background-color: tomato;
+}
