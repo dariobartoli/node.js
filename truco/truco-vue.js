@@ -331,6 +331,8 @@ const app = Vue.createApp({
             p2Round: 0,
             p1Points: 0,
             p2Points: 0,
+            p1PointsBad: false,
+            p2PointsBad: false,
             cardsTruco: [],
             p1Turn: true,
             p2Turn: true,
@@ -338,6 +340,7 @@ const app = Vue.createApp({
             typeEnvido: "",
             mano: "",
             checkVictoryField: [],
+            winner: "",
         }
     },
     methods:{
@@ -429,16 +432,22 @@ const app = Vue.createApp({
                 this.playerTwo.vale4 = false
                 this.playerOne.totalEnvido = 0
                 this.playerTwo.totalEnvido = 0
+                this.playerOne.envido = false
+                this.playerTwo.envido = false
+                this.panelEnvidoP1 = false
+                this.panelEnvidoP2 = false
                 this.game.p1Round = 0
                 this.game.p2Round = 0
                 this.game.p1Turn = true
                 this.game.p2Turn = true
                 this.game.typeTruco = "nada"
+                this.game.typeEnvido = ""
                 this.panelTrucoP1 = false
                 this.panelTrucoP2 = false
                 this.game.checkVictoryField = []
                 this.game.gameStart = false
                 this.trucoSay = false
+                this.envidoSay = false
             }, number);
         },
         denyReTruco(){
@@ -819,9 +828,7 @@ const app = Vue.createApp({
     },
     computed:{
         fieldCheck(){
-            if(this.game.typeTruco == "truco"){
-                ""
-            }else if(this.game.typeTruco == "nada" || this.game.typeTruco == "trucoAccept" || this.game.typeTruco == "reTrucoAccept" || this.game.typeTruco == "vale4Accept"){
+            if(this.game.typeTruco == "nada" || this.game.typeTruco == "trucoAccept" || this.game.typeTruco == "reTrucoAccept" || this.game.typeTruco == "vale4Accept"){
                 if(this.field.length < 2){
                     ""
                 }else{
@@ -867,71 +874,7 @@ const app = Vue.createApp({
                         this.field = []
                     }, 1000);
                 }
-            }
-        },
-        gameCheck(){
-            if(this.game.checkVictoryField[0] == "E" && this.game.checkVictoryField[1] == "E" && this.game.checkVictoryField[2] == "E"){
-                if(this.game.typeTruco == "nada"){
-                    this.game.mano == "P1" ? this.game.p1Points += 1 : this.game.p2Points += 1
-                    this.clean(500)
-                }else if(this.game.typeTruco == "trucoAccept"){
-                    this.game.mano == "P1" ? this.game.p1Points += 2 : this.game.p2Points += 2
-                    this.clean(500)
-                }else if(this.game.typeTruco == "reTrucoAccept"){
-                    this.game.mano == "P1" ? this.game.p1Points += 3 : this.game.p2Points += 3
-                    this.clean(500)
-                }else if(this.game.typeTruco == "vale4Accept"){
-                    this.game.mano == "P1" ? this.game.p1Points += 4 : this.game.p2Points += 4
-                    this.clean(500)
-                }
-            }else if(this.game.checkVictoryField[0] == "E"){
-                if(this.game.p1Round == 1 || this.game.p2Round == 1){
-                    if(this.game.typeTruco == "nada"){
-                        this.game.p1Round == 1 ? this.game.p1Points += 1 : this.game.p2Points += 1
-                        this.clean(500)
-                    }else if(this.game.typeTruco == "trucoAccept"){
-                        this.game.p1Round == 1 ? this.game.p1Points += 2 : this.game.p2Points += 2
-                        this.clean(500)
-                    }else if(this.game.typeTruco == "reTrucoAccept"){
-                        this.game.p1Round == 1 ? this.game.p1Points += 3 : this.game.p2Points += 3
-                        this.clean(500)
-                    }else if(this.game.typeTruco == "vale4Accept"){
-                        this.game.p1Round == 1 ? this.game.p1Points += 4 : this.game.p2Points += 4
-                        this.clean(500)
-                    }
-                }
-            }else if(this.game.checkVictoryField[2] == "E" || this.game.checkVictoryField[1] == "E"){
-                if(this.game.typeTruco == "nada"){
-                    this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 1 : this.game.p2Points += 1
-                    this.clean(500)
-                }else if(this.game.typeTruco == "trucoAccept"){
-                    this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 2 : this.game.p2Points += 2
-                    this.clean(500)
-                }else if(this.game.typeTruco == "reTrucoAccept"){
-                    this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 3 : this.game.p2Points += 3
-                    this.clean(500)
-                }else if(this.game.typeTruco == "vale4Accept"){
-                    this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 4 : this.game.p2Points += 4
-                    this.clean(500)
-                }
-            }else if(this.game.p1Round == 2 || this.game.p2Round == 2){
-                if(this.game.typeTruco == "nada"){
-                    this.game.p1Round == 2 ? this.game.p1Points += 1 : this.game.p2Points += 1
-                    this.clean(500)
-                }else if(this.game.typeTruco == "trucoAccept"){
-                    this.game.p1Round == 2 ? this.game.p1Points += 2 : this.game.p2Points += 2
-                    this.clean(500)
-                }else if(this.game.typeTruco == "reTrucoAccept"){
-                    this.game.p1Round == 2 ? this.game.p1Points += 3 : this.game.p2Points += 3
-                    this.clean(500)
-                }else if(this.game.typeTruco == "vale4Accept"){
-                    this.game.p1Round == 2 ? this.game.p1Points += 4 : this.game.p2Points += 4
-                    this.clean(500)
-                }
-            }
-        },
-        playTruco(){
-            if(this.game.typeTruco == "truco" && this.field.length == 2){
+            }else if(this.game.typeTruco == "truco" && this.field.length == 2){
                 let player = this.field[0][1].truco
                 let card = this.field[0][0].value
                 let numberPlayer = this.field[0][1].numberP
@@ -1185,6 +1128,67 @@ const app = Vue.createApp({
                 }
             }
         },
+        gameCheck(){
+            if(this.game.checkVictoryField[0] == "E" && this.game.checkVictoryField[1] == "E" && this.game.checkVictoryField[2] == "E"){
+                if(this.game.typeTruco == "nada"){
+                    this.game.mano == "P1" ? this.game.p1Points += 1 : this.game.p2Points += 1
+                    this.clean(500)
+                }else if(this.game.typeTruco == "trucoAccept"){
+                    this.game.mano == "P1" ? this.game.p1Points += 2 : this.game.p2Points += 2
+                    this.clean(500)
+                }else if(this.game.typeTruco == "reTrucoAccept"){
+                    this.game.mano == "P1" ? this.game.p1Points += 3 : this.game.p2Points += 3
+                    this.clean(500)
+                }else if(this.game.typeTruco == "vale4Accept"){
+                    this.game.mano == "P1" ? this.game.p1Points += 4 : this.game.p2Points += 4
+                    this.clean(500)
+                }
+            }else if(this.game.checkVictoryField[0] == "E"){
+                if(this.game.p1Round == 1 || this.game.p2Round == 1){
+                    if(this.game.typeTruco == "nada"){
+                        this.game.p1Round == 1 ? this.game.p1Points += 1 : this.game.p2Points += 1
+                        this.clean(500)
+                    }else if(this.game.typeTruco == "trucoAccept"){
+                        this.game.p1Round == 1 ? this.game.p1Points += 2 : this.game.p2Points += 2
+                        this.clean(500)
+                    }else if(this.game.typeTruco == "reTrucoAccept"){
+                        this.game.p1Round == 1 ? this.game.p1Points += 3 : this.game.p2Points += 3
+                        this.clean(500)
+                    }else if(this.game.typeTruco == "vale4Accept"){
+                        this.game.p1Round == 1 ? this.game.p1Points += 4 : this.game.p2Points += 4
+                        this.clean(500)
+                    }
+                }
+            }else if(this.game.checkVictoryField[2] == "E" || this.game.checkVictoryField[1] == "E"){
+                if(this.game.typeTruco == "nada"){
+                    this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 1 : this.game.p2Points += 1
+                    this.clean(500)
+                }else if(this.game.typeTruco == "trucoAccept"){
+                    this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 2 : this.game.p2Points += 2
+                    this.clean(500)
+                }else if(this.game.typeTruco == "reTrucoAccept"){
+                    this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 3 : this.game.p2Points += 3
+                    this.clean(500)
+                }else if(this.game.typeTruco == "vale4Accept"){
+                    this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 4 : this.game.p2Points += 4
+                    this.clean(500)
+                }
+            }else if(this.game.p1Round == 2 || this.game.p2Round == 2){
+                if(this.game.typeTruco == "nada"){
+                    this.game.p1Round == 2 ? this.game.p1Points += 1 : this.game.p2Points += 1
+                    this.clean(500)
+                }else if(this.game.typeTruco == "trucoAccept"){
+                    this.game.p1Round == 2 ? this.game.p1Points += 2 : this.game.p2Points += 2
+                    this.clean(500)
+                }else if(this.game.typeTruco == "reTrucoAccept"){
+                    this.game.p1Round == 2 ? this.game.p1Points += 3 : this.game.p2Points += 3
+                    this.clean(500)
+                }else if(this.game.typeTruco == "vale4Accept"){
+                    this.game.p1Round == 2 ? this.game.p1Points += 4 : this.game.p2Points += 4
+                    this.clean(500)
+                }
+            }
+        },
         checkPointsEnvido(){
             if(this.game.gameStart == true){
                 setTimeout(() => {
@@ -1193,6 +1197,45 @@ const app = Vue.createApp({
                         this.pointsEnvido(this.playerTwo)
                     }
                 }, 150);
+            }
+        },
+        checkPointsPlayer(){
+            if(!this.game.p1PointsBad){
+                if(this.game.p1Points >= 15){
+                    let newPoints = this.game.p1Points - 15
+                    setTimeout(() => {
+                        this.game.p1Points = newPoints
+                        this.game.p1PointsBad = true
+                    }, 600);
+                }
+            }
+            if(!this.game.p2PointsBad){
+                if(this.game.p2Points >= 15){
+                    let newPoints = this.game.p2Points - 15
+                    setTimeout(() => {
+                        this.game.p2Points = newPoints
+                        this.game.p2PointsBad = true
+                    }, 600);
+                }
+            }
+            if(this.game.p1PointsBad){
+                if(this.game.p1Points >= 15){
+                    this.game.winner = "GANO EL JUGADOR 1"
+                }
+            }
+            if(this.game.p2PointsBad){
+                if(this.game.p2Points >= 15){
+                    this.game.winner = "GANO EL JUGADOR 2"
+                }
+            }
+        },
+        bot(){
+            if(this.game.gameStart){
+                if(!this.game.p1Turn){
+                    setTimeout(() => {
+                        this.selectCard(this.playerOne.cardHand[0], this.playerOne)
+                    }, 2000);
+                }
             }
         }
     }

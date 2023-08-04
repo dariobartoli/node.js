@@ -13,7 +13,7 @@
             <div>
                 <div class="cardContainer">
                     <div v-for="cardP1 in playerOne.cardHand">
-                        <button :disabled="game.p1Turn || field.length == 2" @click.prevent="selectCard(cardP1, playerOne)" class="card" >
+                        <button :disabled="game.p1Turn || field.length == 2" @click.prevent="selectCard(cardP1, playerOne)" class="card" :class="{cardBlock: game.p1Turn == true}">
                             <div class="divCard">
                                 <p class="number1">{{cardP1.number}}</p>
                                 <img :src="cardP1.img" alt="imagen-card" class="imageCard">
@@ -32,7 +32,7 @@
                         <button @click.prevent="selectCard(cardP1, playerOne)">Jugar Carta</button>
                     </div>
 
-                    <div v-if="game.p1Turn == false" class="panelP1">
+                    <div class="panelP1" :class="{block: game.p1Turn == true}" v-show="game.gameStart">
                         <div>
                             <button @click.prevent="cantarTruco(playerOne)" :disabled="trucoSay == true">Truco</button>
                             <button @click.prevent="cantarReTruco(playerOne)" :disabled="playerTwo.truco == false">Re Truco</button>
@@ -42,6 +42,14 @@
                             <button @click.prevent="sayEnvido('envido', playerOne)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true">Envido</button>
                             <button @click.prevent="sayEnvido('realenvido', playerOne)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true">Real Envido</button>
                             <button @click.prevent="sayEnvido('faltaenvido', playerOne)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true">Falta Envido</button>
+                        </div>
+                        <div>
+                            <h1>PUNTAJE:</h1>
+                            <h1 v-if="!game.p1PointsBad">Malas = {{game.p1Points}}</h1>
+                            <h1 v-if="game.p1PointsBad">Buenas = {{game.p1Points}}</h1>
+                        </div>
+                        <div>
+                            <h1>Puntos Envido = {{playerOne.totalEnvido}}</h1>
                         </div>
                     </div>
                 </div>
@@ -62,7 +70,7 @@
             <div>
                 <div class="cardContainer">
                     <div v-for="cardP2 in playerTwo.cardHand">
-                        <button :disabled="game.p2Turn || field.length == 2" @click.prevent="selectCard(cardP2, playerTwo)" class="card">
+                        <button :disabled="game.p2Turn || field.length == 2" @click.prevent="selectCard(cardP2, playerTwo)" class="card" :class="{cardBlock: game.p2Turn == true}" >
                             <div class="divCard">
                                 <p class="number1">{{cardP2.number}}</p>
                                 <img :src="cardP2.img" alt="imagen-card" class="imageCard">
@@ -80,7 +88,7 @@
                         </div>
                         <button @click.prevent="selectCard(cardP2, playerTwo)">Jugar Carta</button>
                     </div>
-                    <div v-if="game.p2Turn == false" class="panelP2">
+                    <div class="panelP2" :class="{block: game.p2Turn == true}" v-show="game.gameStart">
                         <div>
                             <button @click.prevent="cantarTruco(playerTwo)" :disabled="trucoSay == true">Truco</button>
                             <button @click.prevent="cantarReTruco(playerTwo)" :disabled="playerOne.truco == false">Re Truco</button>
@@ -90,6 +98,14 @@
                             <button @click.prevent="sayEnvido('envido', playerTwo)" :disabled="envidoSay == true || playerTwo.cardHand.length <= 2 || trucoSay == true">Envido</button>
                             <button @click.prevent="sayEnvido('realenvido', playerTwo)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true">Real Envido</button>
                             <button @click.prevent="sayEnvido('faltaenvido', playerTwo)" :disabled="envidoSay == true || playerOne.cardHand.length <= 2 || trucoSay == true">Falta Envido</button>
+                        </div>
+                        <div>
+                            <h1>PUNTAJE:</h1>
+                            <h1 v-if="!game.p2PointsBad">Malas = {{game.p2Points}}</h1>
+                            <h1 v-if="game.p2PointsBad">Buenas = {{game.p2Points}}</h1>
+                        </div>
+                        <div>
+                            <h1>Puntos Envido = {{playerTwo.totalEnvido}}</h1>
                         </div>
                     </div>
                 </div>
@@ -150,11 +166,14 @@
 
             
             <button @click="mixAndShare(deck.deck)" v-if="game.gameStart == false" class="startGame">Empezar</button>
+
+
         </div>
         {{fieldCheck}}
         {{gameCheck}}
-        {{playTruco}}
         {{checkPointsEnvido}}
+        {{checkPointsPlayer}}
+        {{bot}}
     </div>
 
 
