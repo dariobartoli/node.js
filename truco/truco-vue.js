@@ -300,6 +300,8 @@ const app = Vue.createApp({
             panelEnvidoP2: false,
             trucoSay: false,
             envidoSay: false,
+            botPlayer: {},
+            count: 1,
         }
     },
     created(){
@@ -338,9 +340,18 @@ const app = Vue.createApp({
             p2Turn: true,
             typeTruco: "nada",
             typeEnvido: "",
+            statusEnvido: true,
             mano: "",
             checkVictoryField: [],
             winner: "",
+        }
+        this.botPlayer = {
+            botStart: false,
+            decisionEnvido: 0,
+            envidoStatus: true,
+            envido: "nada",
+            trucoPoints: 0,
+            trucoStatus: true,
         }
     },
     methods:{
@@ -371,6 +382,19 @@ const app = Vue.createApp({
             this.mix(array)
             this.share(array)
             this.game.gameStart = true
+            if(this.playerOne.cardHand.length == 3 && this.playerTwo.cardHand.length == 3){
+                this.pointsEnvido(this.playerOne)
+                this.pointsEnvido(this.playerTwo)
+            }
+            setTimeout(() => {
+                this.botStatus()
+            }, 500);
+            setTimeout(()=>{
+                this.count += 1
+            }, 700)
+            setTimeout(() =>{
+                this.botPlayer.botStart = true
+            }, 2000)
         },
         turn(){
             let random = Math.floor(Math.random() * 2) + 1
@@ -412,6 +436,8 @@ const app = Vue.createApp({
             playe == 1 ? this.cardP1 = card : this.cardP2 = card
         },
         denyTruco(){
+            this.botPlayer.trucoStatus = true
+            this.count += 1
             if(this.playerOne.truco == true){
                 this.game.p1Points += 1
             }else if(this.playerTwo.truco == true){
@@ -446,11 +472,14 @@ const app = Vue.createApp({
                 this.panelTrucoP2 = false
                 this.game.checkVictoryField = []
                 this.game.gameStart = false
+                this.game.statusEnvido = true
                 this.trucoSay = false
                 this.envidoSay = false
             }, number);
         },
         denyReTruco(){
+            this.botPlayer.trucoStatus = true
+            this.count += 1
             if(this.playerOne.reTruco == true){
                 this.game.p1Points += 2
             }else if(this.playerTwo.reTruco == true){
@@ -459,6 +488,8 @@ const app = Vue.createApp({
             this.clean(500)
         },
         denyVale4(){
+            this.botPlayer.trucoStatus = true
+            this.count += 1
             if(this.playerOne.vale4 == true){
                 this.game.p1Points += 3
             }else if(this.playerTwo.vale4 == true){
@@ -473,6 +504,8 @@ const app = Vue.createApp({
             playe == 1? this.playerOne.truco = true : this.playerTwo.truco = true
         },
         aceptarTruco(){
+            this.botPlayer.trucoStatus = true
+            this.count += 1
             this.game.typeTruco = "truco";
             this.panelTrucoP1 = false
             this.panelTrucoP2 = false
@@ -485,6 +518,8 @@ const app = Vue.createApp({
             playe == 1? this.playerOne.reTruco = true : this.playerTwo.reTruco = true
         },
         aceptarReTruco(){
+            this.botPlayer.trucoStatus = true
+            this.count += 1
             this.game.typeTruco = "reTruco";
             this.panelTrucoP1 = false
             this.panelTrucoP2 = false
@@ -497,6 +532,8 @@ const app = Vue.createApp({
             playe == 1? [this.panelTrucoP1 = true, this.panelTrucoP2 = false] : [this.panelTrucoP1 = false, this.panelTrucoP2 = true]
         },
         aceptarVale4(){
+            this.botPlayer.trucoStatus = true
+            this.count += 1
             this.game.typeTruco = "vale4";
             this.panelTrucoP1 = false
             this.panelTrucoP2 = false
@@ -505,19 +542,15 @@ const app = Vue.createApp({
             this.envidoSay = true
             if(this.game.typeEnvido == ""){
                 if(type == "envido"){
-                    console.log("entré al envido");
                     this.game.typeEnvido = "envido"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "envido" : this.playerTwo.envido = "envido"
                     playe == 1? this.panelEnvidoP2 = true : this.panelEnvidoP1 = true
                 }else if(type == "realenvido"){
-                    console.log("entré al real envido");
-                    this.game.typeEnvido = "realenvido"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "realenvido" : this.playerTwo.envido = "realenvido"
                     playe == 1? [this.panelEnvidoP2 = true, this.panelEnvidoP1 = false] : [this.panelEnvidoP2 = false, this.panelEnvidoP1 = true]
                 }else if(type == "faltaenvido"){
-                    console.log("entré al falta envido");
                     this.game.typeEnvido = "faltaenvido"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "faltaenvido" : this.playerTwo.envido = "faltaenvido"
@@ -525,19 +558,16 @@ const app = Vue.createApp({
                 }
             }else if(this.game.typeEnvido == "envido"){
                 if(type == "envido"){
-                    console.log("entré al envido envido");
                     this.game.typeEnvido = "envidoenvido"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "envidoenvido" : this.playerTwo.envido = "envidoenvido"
                     playe == 1? [this.panelEnvidoP2 = true, this.panelEnvidoP1 = false] : [this.panelEnvidoP2 = false, this.panelEnvidoP1 = true]
                 }else if(type == "realenvido"){
-                    console.log("entré al envido real envido");
                     this.game.typeEnvido = "envidorealenvido"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "envidorealenvido" : this.playerTwo.envido = "envidorealenvido"
                     playe == 1? [this.panelEnvidoP2 = true, this.panelEnvidoP1 = false] : [this.panelEnvidoP2 = false, this.panelEnvidoP1 = true]
                 }else if(type == "faltaenvido"){
-                    console.log("entré al envido falta envido");
                     this.game.typeEnvido = "envidofaltaenvido"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "envidofaltaenvido" : this.playerTwo.envido = "envidofaltaenvido"
@@ -545,7 +575,6 @@ const app = Vue.createApp({
                 }
             }else if(this.game.typeEnvido == "realenvido"){
                 if(type == "faltaenvido"){
-                    console.log("entré al real envido falta");
                     this.game.typeEnvido = "realenvidofalta"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "realenvidofalta" : this.playerTwo.envido = "realenvidofalta"
@@ -553,7 +582,6 @@ const app = Vue.createApp({
                 }
             }else if(this.game.typeEnvido == "envidoenvido"){
                 if(type == "realenvido"){
-                    console.log("entré al envido envido real envido");
                     this.game.typeEnvido = "envidoenvidoreal"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "envidoenvidoreal" : this.playerTwo.envido = "envidoenvidoreal"
@@ -561,7 +589,6 @@ const app = Vue.createApp({
                 }
             }else if(this.game.typeEnvido == "envidorealenvido"){
                 if(type == "faltaenvido"){
-                    console.log("entré al envido real envido falta");
                     this.game.typeEnvido = "envidorealfalta"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "envidorealfalta" : this.playerTwo.envido = "envidorealfalta"
@@ -569,7 +596,6 @@ const app = Vue.createApp({
                 }
             }else if(this.game.typeEnvido == "envidoenvidoreal"){
                 if(type == "faltaenvido"){
-                    console.log("entré al envido envido real envido falta");
                     this.game.typeEnvido = "envidoenvidorealfalta"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "envidoenvidorealfalta" : this.playerTwo.envido = "envidoenvidorealfalta"
@@ -577,136 +603,145 @@ const app = Vue.createApp({
                 }
             }
         },
-        acceptEnvido(){
-            console.log("acepté el envido");
+        acceptEnvido(somePlayer){   
             let type = this.game.typeEnvido
             this.panelEnvidoP1 = false
             this.panelEnvidoP2 = false
-            if(type == "envido"){
-                if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
-                    this.game.p1Points += 2
-                }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
-                    this.game.p2Points += 2
-                }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
-                    if(this.game.mano == "P1"){
+            this.botPlayer.envidoStatus = true
+            this.count++
+            let pointsFaltaEnvido = this.pointsWinFaltaEnvido(somePlayer)
+            console.log(pointsFaltaEnvido);
+            setTimeout(() => {
+                if(type == "envido"){
+                    if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
                         this.game.p1Points += 2
-                    }else if(this.game.mano == "P2"){
+                    }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
                         this.game.p2Points += 2
+                    }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
+                        if(this.game.mano == "P1"){
+                            this.game.p1Points += 2
+                        }else if(this.game.mano == "P2"){
+                            this.game.p2Points += 2
+                        }
                     }
-                }
-            }else if(type == "realenvido"){
-                if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
-                    this.game.p1Points += 3
-                }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
-                    this.game.p2Points += 3
-                }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
-                    if(this.game.mano == "P1"){
+                }else if(type == "realenvido"){
+                    if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
                         this.game.p1Points += 3
-                    }else if(this.game.mano == "P2"){
+                    }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
                         this.game.p2Points += 3
+                    }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
+                        if(this.game.mano == "P1"){
+                            this.game.p1Points += 3
+                        }else if(this.game.mano == "P2"){
+                            this.game.p2Points += 3
+                        }
                     }
-                }
-            }else if(type == "faltaenvido"){
-                if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
-                    this.game.p1Points += 5
-                }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
-                    this.game.p2Points += 5
-                }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
-                    if(this.game.mano == "P1"){
-                        this.game.p1Points += 5
-                    }else if(this.game.mano == "P2"){
-                        this.game.p2Points += 5
+                }else if(type == "faltaenvido"){
+                    console.log("entré al falta");
+                    if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
+                        this.game.p1Points += pointsFaltaEnvido
+                    }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
+                        this.game.p2Points += pointsFaltaEnvido
+                    }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
+                        if(this.game.mano == "P1"){
+                            this.game.p1Points += pointsFaltaEnvido
+                        }else if(this.game.mano == "P2"){
+                            this.game.p2Points += pointsFaltaEnvido
+                        }
                     }
-                }
-            }else if(type == "envidoenvido"){
-                if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
-                    this.game.p1Points += 4
-                }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
-                    this.game.p2Points += 4
-                }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
-                    if(this.game.mano == "P1"){
+                }else if(type == "envidoenvido"){
+                    if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
                         this.game.p1Points += 4
-                    }else if(this.game.mano == "P2"){
+                    }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
                         this.game.p2Points += 4
+                    }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
+                        if(this.game.mano == "P1"){
+                            this.game.p1Points += 4
+                        }else if(this.game.mano == "P2"){
+                            this.game.p2Points += 4
+                        }
                     }
-                }
-            }else if(type == "envidorealenvido"){
-                if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
-                    this.game.p1Points += 5
-                }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
-                    this.game.p2Points += 5
-                }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
-                    if(this.game.mano == "P1"){
+                }else if(type == "envidorealenvido"){
+                    if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
                         this.game.p1Points += 5
-                    }else if(this.game.mano == "P2"){
+                    }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
                         this.game.p2Points += 5
+                    }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
+                        if(this.game.mano == "P1"){
+                            this.game.p1Points += 5
+                        }else if(this.game.mano == "P2"){
+                            this.game.p2Points += 5
+                        }
                     }
-                }
-            }else if(type == "envidofaltaenvido"){
-                if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
-                    this.game.p1Points += 6
-                }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
-                    this.game.p2Points += 6
-                }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
-                    if(this.game.mano == "P1"){
-                        this.game.p1Points += 6
-                    }else if(this.game.mano == "P2"){
-                        this.game.p2Points += 6
+                }else if(type == "envidofaltaenvido"){
+                    if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
+                        this.game.p1Points += pointsFaltaEnvido
+                    }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
+                        this.game.p2Points += pointsFaltaEnvido
+                    }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
+                        if(this.game.mano == "P1"){
+                            this.game.p1Points += pointsFaltaEnvido
+                        }else if(this.game.mano == "P2"){
+                            this.game.p2Points += pointsFaltaEnvido
+                        }
                     }
-                }
-            }else if(type == "realenvidofalta"){
-                if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
-                    this.game.p1Points += 7
-                }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
-                    this.game.p2Points += 7
-                }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
-                    if(this.game.mano == "P1"){
+                }else if(type == "realenvidofalta"){
+                    if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
+                        this.game.p1Points += pointsFaltaEnvido
+                    }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
+                        this.game.p2Points += pointsFaltaEnvido
+                    }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
+                        if(this.game.mano == "P1"){
+                            this.game.p1Points += pointsFaltaEnvido
+                        }else if(this.game.mano == "P2"){
+                            this.game.p2Points += pointsFaltaEnvido
+                        }
+                    }
+                }else if(type == "envidoenvidoreal"){
+                    if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
                         this.game.p1Points += 7
-                    }else if(this.game.mano == "P2"){
+                    }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
                         this.game.p2Points += 7
+                    }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
+                        if(this.game.mano == "P1"){
+                            this.game.p1Points += 7
+                        }else if(this.game.mano == "P2"){
+                            this.game.p2Points += 7
+                        }
+                    }
+                }else if(type == "envidorealfalta"){
+                    if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
+                        this.game.p1Points += pointsFaltaEnvido
+                    }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
+                        this.game.p2Points += pointsFaltaEnvido
+                    }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
+                        if(this.game.mano == "P1"){
+                            this.game.p1Points += pointsFaltaEnvido
+                        }else if(this.game.mano == "P2"){
+                            this.game.p2Points += pointsFaltaEnvido
+                        }
+                    }
+                }else if(type == "envidoenvidorealfalta"){
+                    if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
+                        this.game.p1Points += pointsFaltaEnvido
+                    }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
+                        this.game.p2Points += pointsFaltaEnvido
+                    }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
+                        if(this.game.mano == "P1"){
+                            this.game.p1Points += pointsFaltaEnvido
+                        }else if(this.game.mano == "P2"){
+                            this.game.p2Points += pointsFaltaEnvido
+                        }
                     }
                 }
-            }else if(type == "envidoenvidoreal"){
-                if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
-                    this.game.p1Points += 7
-                }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
-                    this.game.p2Points += 7
-                }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
-                    if(this.game.mano == "P1"){
-                        this.game.p1Points += 7
-                    }else if(this.game.mano == "P2"){
-                        this.game.p2Points += 7
-                    }
-                }
-            }else if(type == "envidorealfalta"){
-                if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
-                    this.game.p1Points += 8
-                }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
-                    this.game.p2Points += 8
-                }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
-                    if(this.game.mano == "P1"){
-                        this.game.p1Points += 8
-                    }else if(this.game.mano == "P2"){
-                        this.game.p2Points += 8
-                    }
-                }
-            }else if(type == "envidoenvidorealfalta"){
-                if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
-                    this.game.p1Points += 9
-                }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
-                    this.game.p2Points += 9
-                }else if(this.playerOne.totalEnvido == this.playerTwo.totalEnvido){
-                    if(this.game.mano == "P1"){
-                        this.game.p1Points += 9
-                    }else if(this.game.mano == "P2"){
-                        this.game.p2Points += 9
-                    }
-                }
-            }
+            }, 150);
         },
         denyEnvido(){
             this.panelEnvidoP1 = false
             this.panelEnvidoP2 = false
+            this.botPlayer.envidoStatus = true
+            this.game.statusEnvido = false
+            this.count++
             if(this.game.typeEnvido == "envido"){
                 if(this.playerOne.envido == "envido"){
                     this.game.p1Points += 1
@@ -824,6 +859,57 @@ const app = Vue.createApp({
                     console.log(value);
                 }
             }
+        },
+        botStatus(){
+            this.botPlayer.decisionEnvido = Math.floor(Math.random() * 10) + 1;
+            console.log("puntos de decision:" + this.botPlayer.decisionEnvido);
+            if(this.playerOne.totalEnvido >= 32){
+                this.botPlayer.envido = "muyaltos"
+            }else if(this.playerOne.totalEnvido > 28){
+                this.botPlayer.envido = "altos"
+            }else if(this.playerOne.totalEnvido > 26){
+                this.botPlayer.envido = "medios"
+            }else if(this.playerOne.totalEnvido > 23){
+                this.botPlayer.envido = "bajos"
+            }else this.botPlayer.envido = "no"
+            let valueTruco = 0
+            this.playerOne.cardHand.forEach((card) =>{
+                valueTruco += card.value
+            })
+            this.botPlayer.trucoPoints = valueTruco
+            console.log("puntos del truco bot" + valueTruco);
+            this.playerOne.cardHand = this.playerOne.cardHand.sort((a,b) => b.value - a.value).reverse()
+        },
+        botPlayCard(){
+        },
+        pointsWinFaltaEnvido(player){
+            let playe = player.numberP
+            if(this.game.p1PointsBad == false && this.game.p2PointsBad == false){
+                console.log("entré a las malas");
+                if(playe == 1){ 
+                    return (15 - this.game.p2Points)
+                }else{
+                    return (15 - this.game.p1Points)
+                }
+            }else if(this.game.p1PointsBad == true && this.game.p2PointsBad == false || this.game.p1PointsBad == false && this.game.p2PointsBad == true){
+                console.log("entré a las medias malas");
+                let pointsP1 = 15 - this.game.p1Points
+                let pointsP2 = 15 - this.game.p2Points 
+                if(pointsP1 < pointsP2){
+                    return pointsP1
+                }else{
+                    return pointsP2
+                }
+            }else if(this.game.p1PointsBad == true && this.game.p2PointsBad == true){
+                console.log("entré a las buenas");
+                let pointsP1 = 15 -this.game.p1Points
+                let pointsP2 = 15 -this.game.p2Points
+                if(pointsP1 < pointsP2){
+                    return pointsP1
+                }else{
+                    return pointsP2
+                }
+            }
         }
     },
     computed:{
@@ -872,7 +958,7 @@ const app = Vue.createApp({
                     }
                     setTimeout(() => {
                         this.field = []
-                    }, 1000);
+                    }, 2000);
                 }
             }else if(this.game.typeTruco == "truco" && this.field.length == 2){
                 let player = this.field[0][1].truco
@@ -1189,16 +1275,6 @@ const app = Vue.createApp({
                 }
             }
         },
-        checkPointsEnvido(){
-            if(this.game.gameStart == true){
-                setTimeout(() => {
-                    if(this.playerOne.cardHand.length == 3 && this.playerTwo.cardHand.length == 3){
-                        this.pointsEnvido(this.playerOne)
-                        this.pointsEnvido(this.playerTwo)
-                    }
-                }, 150);
-            }
-        },
         checkPointsPlayer(){
             if(!this.game.p1PointsBad){
                 if(this.game.p1Points >= 15){
@@ -1229,14 +1305,282 @@ const app = Vue.createApp({
                 }
             }
         },
-        bot(){
-            if(this.game.gameStart){
-                if(!this.game.p1Turn){
-                    setTimeout(() => {
+        botProgram(){
+            console.log(this.count);
+            if(this.playerOne.cardHand.length >= 1 && this.field.length <= 1 && this.botPlayer.botStart == true){
+                if(!this.game.p1Turn && this.botPlayer.envidoStatus == true && this.botPlayer.trucoStatus == true){
+                    if(this.playerOne.cardHand.length == 3){
+                        if(this.botPlayer.decisionEnvido <=5 && this.game.mano == "P1"){
+                            this.selectCard(this.playerOne.cardHand[0], this.playerOne)
+                        }else if(this.botPlayer.decisionEnvido >=5 && this.game.mano == "P1"){
+                            this.selectCard(this.playerOne.cardHand[2], this.playerOne)
+                        }else{
+                            let card = this.playerOne.cardHand.filter((card) => card.value > this.field[0][0].value)
+                            if(card.length > 0){
+                                this.selectCard(card[0], this.playerOne)
+                            }else{
+                                this.selectCard(this.playerOne.cardHand[0], this.playerOne)
+                            }
+                        }
+                    }else if(this.playerOne.cardHand.length == 2){
+                        if(this.game.checkVictoryField[0] == "P2" || this.game.checkVictoryField[0] == "E"){
+                            this.selectCard(this.playerOne.cardHand[1], this.playerOne)
+                        }else if(this.game.checkVictoryField[0] == "P1"){
+                            if(this.botPlayer.decisionEnvido <=5){
+                                this.selectCard(this.playerOne.cardHand[0], this.playerOne)
+                            }else if(this.botPlayer.decisionEnvido >=5){
+                                this.selectCard(this.playerOne.cardHand[1], this.playerOne)
+                            }
+                        }else{
+                            let card = this.playerOne.cardHand.filter((card) => card.value > this.field[0][0].value)
+                            if(card.length > 0){
+                                this.selectCard(card[0], this.playerOne)
+                            }else{
+                                this.selectCard(this.playerOne.cardHand[0], this.playerOne)
+                            }
+                        }
+                    }else if(this.playerOne.cardHand.length == 1){
                         this.selectCard(this.playerOne.cardHand[0], this.playerOne)
-                    }, 2000);
+                    }
                 }
             }
+        },
+        botEnvidoBotTurn(){
+            if(this.game.gameStart == true){
+                if(!this.game.p1Turn && this.envidoSay == false && this.trucoSay == false){
+                    if(this.botPlayer.envido == "no"){
+                        if(this.botPlayer.decisionEnvido == 1 && this.game.typeEnvido == ""){
+                            this.sayEnvido("envido", this.playerOne)
+                            this.botPlayer.envidoStatus = false
+                        }else if(this.botPlayer.decisionEnvido == 10 && this.game.typeEnvido == ""){
+                            this.sayEnvido("realenvido", this.playerOne)
+                            this.botPlayer.envidoStatus = false
+                        }else console.log("no canté envido");
+                    }else if(this.botPlayer.envido == "bajos"){
+                        if(this.botPlayer.decisionEnvido < 3 && this.game.typeEnvido == ""){
+                            this.sayEnvido("envido", this.playerOne)
+                            this.botPlayer.envidoStatus = false
+                        }else if(this.botPlayer.decisionEnvido > 9 && this.game.typeEnvido == ""){
+                            this.sayEnvido("realenvido", this.playerOne)
+                            this.botPlayer.envidoStatus = false
+                        }else console.log("no canté envido");
+                    }else if(this.botPlayer.envido == "medios"){
+                        if(this.botPlayer.decisionEnvido < 9 && this.game.typeEnvido == ""){
+                            this.sayEnvido("envido", this.playerOne)
+                            this.botPlayer.envidoStatus = false
+                        }else if(this.botPlayer.decisionEnvido > 9 && this.game.typeEnvido == ""){
+                            this.sayEnvido("realenvido", this.playerOne)
+                            this.botPlayer.envidoStatus = false
+                        }else console.log("no canté envido");
+                    }else if(this.botPlayer.envido == "altos"){
+                        if(this.botPlayer.decisionEnvido <=8 && this.game.typeEnvido == ""){
+                            this.sayEnvido("envido", this.playerOne)
+                            this.botPlayer.envidoStatus = false
+                        }else if(this.botPlayer.decisionEnvido >= 9 && this.game.typeEnvido == ""){
+                            this.sayEnvido("realenvido", this.playerOne)
+                            this.botPlayer.envidoStatus = false
+                        }else console.log("no canté envido");
+                    }else if(this.botPlayer.envido == "muyaltos"){
+                        this.sayEnvido("envido", this.playerOne)
+                    }
+                }
+
+            }
+        },
+        botEnvidoResponses(){
+            if(this.panelEnvidoP1 == true){
+                if (this.botPlayer.envido == "no") {
+                    if(this.game.typeEnvido == "envido" && this.botPlayer.decisionEnvido == 10){
+                        this.sayEnvido("envido", this.playerOne)
+                    }else this.denyEnvido()
+                }else if (this.botPlayer.envido == "bajos") {
+                    if(this.game.typeEnvido == "envido"){
+                        if(this.botPlayer.decisionEnvido == 9 || this.botPlayer.decisionEnvido == 2){
+                            this.sayEnvido("envido", this.playerOne)
+                        }else if(this.botPlayer.decisionEnvido == 3){
+                            this.acceptEnvido(this.playerOne)
+                        }else this.denyEnvido()
+                    }else if(this.game.typeEnvido == "envido" && this.botPlayer.decisionEnvido == 6 ||  this.game.typeEnvido == "envido" && this.botPlayer.decisionEnvido == 1){
+                        this.sayEnvido("realenvido", this.playerOne)
+                    }else this.denyEnvido()
+                }else if (this.botPlayer.envido == "medios") {
+                    if(this.game.typeEnvido == "envido"){
+                        if(this.botPlayer.decisionEnvido < 6){
+                            this.sayEnvido("envido", this.playerOne)
+                        }else if(this.botPlayer.decisionEnvido > 8){
+                            this.acceptEnvido(this.playerOne)
+                        }else this.denyEnvido()
+                    }else if(this.game.typeEnvido == "envido"){
+                        if(this.botPlayer.decisionEnvido < 7){
+                            this.sayEnvido("realenvido", this.playerOne)
+                        }else if(this.botPlayer.decisionEnvido > 9){
+                            this.acceptEnvido(this.playerOne)
+                        }else this.denyEnvido()
+                    }else if(this.game.typeEnvido == "realenvido" || this.game.typeEnvido == "faltaenvido"){
+                        if(this.botPlayer.decisionEnvido < 8){
+                            this.acceptEnvido(this.playerOne)
+                        }else this.denyEnvido()
+                    }else if(this.game.typeEnvido == "envidoenvido"){
+                        if(this.botPlayer.decisionEnvido < 6){
+                            this.acceptEnvido(this.playerOne)
+                        }else this.denyEnvido()
+                    }else if(this.game.typeEnvido == "envidorealenvido"){
+                        if(this.botPlayer.decisionEnvido < 3 || this.botPlayer.decisionEnvido  > 8){
+                            this.acceptEnvido(this.playerOne)
+                        }else this.denyEnvido()
+                    }else if(this.game.typeEnvido == "envidofaltaenvido" || this.game.typeEnvido == "envidorealfalta"){
+                        if(this.botPlayer.decisionEnvido > 6){
+                            this.acceptEnvido(this.playerOne)
+                        }else this.denyEnvido()
+                    }else if(this.game.typeEnvido == "envidoenvidoreal" && this.botPlayer.decisionEnvido < 5){
+                        this.acceptEnvido(this.playerOne)
+                    }else this.denyEnvido()
+                }else if (this.botPlayer.envido == "altos") {
+                    if(this.game.typeEnvido == "envido"){
+                        this.sayEnvido("envido",this.playerOne)
+                    }else if(this.game.typeEnvido == "realenvido" || this.game.typeEnvido == "faltaenvido"){
+                        this.acceptEnvido(this.playerOne)
+                    }else if(this.game.typeEnvido == "envidoenvido"){
+                        if(this.botPlayer.decisionEnvido < 6){
+                            this.acceptEnvido(this.playerOne)
+                        }else this.sayEnvido("envidoenvidoreal", this.playerOne)
+                    }else this.acceptEnvido(this.playerOne)
+                }else if (this.botPlayer.envido == "muyaltos") {
+                    if(this.game.typeEnvido == "envido"){
+                        this.sayEnvido("envido",this.playerOne)
+                    }else if(this.game.typeEnvido == "envidoenvido"){
+                        this.sayEnvido("envidoenvidoreal", this.playerOne)
+                    }else this.acceptEnvido(this.playerOne)
+                }
+            }
+        },
+        botTrucoTurn(){
+                if(this.playerOne.cardHand.length >= 1){
+                    if(!this.game.p1Turn && this.trucoSay == false && this.botPlayer.envidoStatus == true){
+                        if(this.botPlayer.trucoPoints >= 20){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarTruco(this.playerOne)
+                        }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.decisionEnvido <= 7 && this.botPlayer.trucoPoints < 20){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarTruco(this.playerOne)
+                        }else if(this.botPlayer.trucoPoints >= 9 && this.botPlayer.decisionEnvido >= 9 && this.botPlayer.trucoPoints < 15){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarTruco(this.playerOne)
+                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.decisionEnvido == 4 && this.botPlayer.trucoPoints < 19){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarTruco(this.playerOne)
+                        }
+                    }else if(!this.game.p1Turn && this.game.typeTruco == "trucoAccept" && this.playerTwo.truco == true){
+                        if(this.botPlayer.trucoPoints >= 24){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarReTruco(this.playerOne)
+                        }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.decisionEnvido <= 5 && this.botPlayer.trucoPoints < 24){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarReTruco(this.playerOne)
+                        }else if(this.botPlayer.trucoPoints >= 9 && this.botPlayer.decisionEnvido >= 9 && this.botPlayer.trucoPoints < 15){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarReTruco(this.playerOne)
+                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.decisionEnvido == 1 && this.botPlayer.trucoPoints < 9){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarReTruco(this.playerOne)
+                        }
+                    }else if(!this.game.p1Turn && this.game.typeTruco == "reTrucoAccept" && this.playerTwo.reTruco == true){
+                        if(this.botPlayer.trucoPoints >= 28){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarVale4(this.playerOne)
+                        }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.decisionEnvido <= 5 && this.botPlayer.trucoPoints < 28){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarVale4(this.playerOne)
+                        }else if(this.botPlayer.trucoPoints >= 9 && this.botPlayer.decisionEnvido >= 9 && this.botPlayer.trucoPoints < 15){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarVale4(this.playerOne)
+                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.decisionEnvido == 1 && this.botPlayer.trucoPoints < 9){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarVale4(this.playerOne)
+                        }
+                    }
+                }if(this.panelTrucoP2 == true){
+                    console.log("entré al panel truco");
+                    if(this.playerTwo.truco == true){
+                        console.log("entré a la respuesta del truco");
+                        if(this.botPlayer.trucoPoints >= 24){
+                            this.botPlayer.trucoStatus = false
+                            this.cantarReTruco(this.playerOne)
+                        }else if(this.botPlayer.trucoPoints >= 20){
+                            if(this.botPlayer.decisionEnvido <=5){
+                                this.botPlayer.trucoStatus = false
+                                this.cantarReTruco(this.playerOne)
+                            }else if(this.botPlayer.decisionEnvido >=6){
+                                this.botPlayer.trucoStatus = false
+                                this.aceptarTruco()
+                            }
+                        }else if(this.botPlayer.trucoPoints >=18){
+                            this.botPlayer.trucoStatus = false
+                            this.aceptarTruco()
+                        }else if(this.botPlayer.trucoPoints >= 10 && this.botPlayer.trucoPoints < 18){
+                            if(this.botPlayer.decisionEnvido <= 5){
+                                this.botPlayer.trucoStatus = false
+                                this.cantarReTruco(this.playerOne)
+                            }else if(this.botPlayer.decisionEnvido > 8){
+                                this.botPlayer.trucoStatus = false
+                                this.aceptarTruco()
+                            }else this.denyTruco()
+                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.trucoPoints < 10){
+                            if(this.botPlayer.decisionEnvido >= 8){
+                                this.botPlayer.trucoStatus = false
+                                this.cantarReTruco(this.playerOne)
+                            }this.denyTruco()
+                        }else this.denyTruco()
+                    }else if(this.playerTwo.reTruco == true){
+                        console.log("entré a la respuesta del retruco");
+                        if(this.botPlayer.trucoPoints >= 24){
+                            this.botPlayer.trucoStatus = false
+                            this.aceptarReTruco()
+                        }else if(this.botPlayer.trucoPoints >= 20){
+                            if(this.botPlayer.decisionEnvido <= 5){
+                                this.botPlayer.trucoStatus = false
+                                this.aceptarReTruco()
+                            }else{
+                                this.botPlayer.trucoStatus = false
+                                this.cantarVale4(this.playerOne)
+                            }
+                        }else if(this.botPlayer.trucoPoints >= 15 && this.botPlayer.trucoPoints < 20){
+                            if(this.botPlayer.decisionEnvido > 8){
+                                this.botPlayer.trucoStatus = false
+                                this.aceptarReTruco()
+                            }else if(this.botPlayer.decisionEnvido < 4){
+                                this.botPlayer.trucoStatus = false
+                                this.cantarVale4(this.playerOne)
+                            }else this.denyReTruco()
+                        }else if(this.botPlayer.trucoPoints >= 3 && this.botPlayer.trucoPoints < 15){
+                            if(this.botPlayer.decisionEnvido == 6 || this.botPlayer.decisionEnvido == 3){
+                                this.botPlayer.trucoStatus = false
+                                this.cantarVale4(this.playerOne)
+                            }else this.denyReTruco()
+                        }else this.denyReTruco()
+                    }else if(this.playerTwo.vale4 == true){
+                        console.log("entré a la respuesta del vale4");
+                        if(this.botPlayer.trucoPoints >= 28){
+                            this.botPlayer.trucoStatus = false
+                            this.aceptarVale4()
+                        }else if(this.botPlayer.trucoPoints >= 26){
+                            if(this.botPlayer.decisionEnvido <= 6){
+                                this.botPlayer.trucoStatus = false
+                                this.aceptarVale4()
+                            }else this.denyVale4()
+                        }else if(this.botPlayer.trucoPoints >= 24){
+                            if(this.botPlayer.decisionEnvido <= 4){
+                                this.botPlayer.trucoStatus = false
+                                this.aceptarVale4()
+                            }else this.denyVale4()
+                        }else if(this.botPlayer.trucoPoints >= 20){
+                            if(this.botPlayer.decisionEnvido == 9 || this.botPlayer.decisionEnvido == 4){
+                                this.botPlayer.trucoStatus = false
+                                this.aceptarVale4()
+                            }else this.denyVale4()
+                        }else this.denyVale4()
+                    }
+                }
         }
     }
     
