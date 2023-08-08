@@ -352,6 +352,7 @@ const app = Vue.createApp({
             envido: "nada",
             trucoPoints: 0,
             trucoStatus: true,
+            play: false
         }
     },
     methods:{
@@ -422,6 +423,7 @@ const app = Vue.createApp({
             this.viewOptionP1 = false
             this.viewOptionP2 = false
             let numberPlayer = player.numberP
+            this.botPlayer.play = false
             if(numberPlayer == 1){
                 this.game.p1Turn = true
                 this.game.p2Turn = false
@@ -443,7 +445,7 @@ const app = Vue.createApp({
             }else if(this.playerTwo.truco == true){
                 this.game.p2Points += 1
             }
-            this.clean(500)
+            this.clean(1000)
         },
         clean(number){
             setTimeout(() => {
@@ -485,7 +487,7 @@ const app = Vue.createApp({
             }else if(this.playerTwo.reTruco == true){
                 this.game.p2Points += 2
             }
-            this.clean(500)
+            this.clean(1000)
         },
         denyVale4(){
             this.botPlayer.trucoStatus = true
@@ -495,7 +497,7 @@ const app = Vue.createApp({
             }else if(this.playerTwo.vale4 == true){
                 this.game.p2Points += 3
             }
-            this.clean(500)
+            this.clean(1000)
         },
         cantarTruco(player){
             let playe = player.numberP
@@ -542,6 +544,7 @@ const app = Vue.createApp({
             this.envidoSay = true
             if(this.game.typeEnvido == ""){
                 if(type == "envido"){
+                    console.log("cante envido");
                     this.game.typeEnvido = "envido"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "envido" : this.playerTwo.envido = "envido"
@@ -558,6 +561,7 @@ const app = Vue.createApp({
                 }
             }else if(this.game.typeEnvido == "envido"){
                 if(type == "envido"){
+                    console.log("cante envido envido");
                     this.game.typeEnvido = "envidoenvido"
                     let playe = player.numberP
                     playe == 1? this.playerOne.envido = "envidoenvido" : this.playerTwo.envido = "envidoenvido"
@@ -610,7 +614,6 @@ const app = Vue.createApp({
             this.botPlayer.envidoStatus = true
             this.count++
             let pointsFaltaEnvido = this.pointsWinFaltaEnvido(somePlayer)
-            console.log(pointsFaltaEnvido);
             setTimeout(() => {
                 if(type == "envido"){
                     if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
@@ -650,6 +653,7 @@ const app = Vue.createApp({
                         }
                     }
                 }else if(type == "envidoenvido"){
+                    console.log("entré al envido envido calculando puntos");
                     if(this.playerOne.totalEnvido > this.playerTwo.totalEnvido){
                         this.game.p1Points += 4
                     }else if(this.playerOne.totalEnvido < this.playerTwo.totalEnvido){
@@ -734,7 +738,7 @@ const app = Vue.createApp({
                         }
                     }
                 }
-            }, 150);
+            }, 200);
         },
         denyEnvido(){
             this.panelEnvidoP1 = false
@@ -1218,60 +1222,60 @@ const app = Vue.createApp({
             if(this.game.checkVictoryField[0] == "E" && this.game.checkVictoryField[1] == "E" && this.game.checkVictoryField[2] == "E"){
                 if(this.game.typeTruco == "nada"){
                     this.game.mano == "P1" ? this.game.p1Points += 1 : this.game.p2Points += 1
-                    this.clean(500)
+                    this.clean(2000)
                 }else if(this.game.typeTruco == "trucoAccept"){
                     this.game.mano == "P1" ? this.game.p1Points += 2 : this.game.p2Points += 2
-                    this.clean(500)
+                    this.clean(2000)
                 }else if(this.game.typeTruco == "reTrucoAccept"){
                     this.game.mano == "P1" ? this.game.p1Points += 3 : this.game.p2Points += 3
-                    this.clean(500)
+                    this.clean(2000)
                 }else if(this.game.typeTruco == "vale4Accept"){
                     this.game.mano == "P1" ? this.game.p1Points += 4 : this.game.p2Points += 4
-                    this.clean(500)
+                    this.clean(2000)
                 }
             }else if(this.game.checkVictoryField[0] == "E"){
                 if(this.game.p1Round == 1 || this.game.p2Round == 1){
                     if(this.game.typeTruco == "nada"){
                         this.game.p1Round == 1 ? this.game.p1Points += 1 : this.game.p2Points += 1
-                        this.clean(500)
+                        this.clean(2000)
                     }else if(this.game.typeTruco == "trucoAccept"){
                         this.game.p1Round == 1 ? this.game.p1Points += 2 : this.game.p2Points += 2
-                        this.clean(500)
+                        this.clean(2000)
                     }else if(this.game.typeTruco == "reTrucoAccept"){
                         this.game.p1Round == 1 ? this.game.p1Points += 3 : this.game.p2Points += 3
-                        this.clean(500)
+                        this.clean(2000)
                     }else if(this.game.typeTruco == "vale4Accept"){
                         this.game.p1Round == 1 ? this.game.p1Points += 4 : this.game.p2Points += 4
-                        this.clean(500)
+                        this.clean(2000)
                     }
                 }
             }else if(this.game.checkVictoryField[2] == "E" || this.game.checkVictoryField[1] == "E"){
                 if(this.game.typeTruco == "nada"){
                     this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 1 : this.game.p2Points += 1
-                    this.clean(500)
+                    this.clean(2000)
                 }else if(this.game.typeTruco == "trucoAccept"){
                     this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 2 : this.game.p2Points += 2
-                    this.clean(500)
+                    this.clean(2000)
                 }else if(this.game.typeTruco == "reTrucoAccept"){
                     this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 3 : this.game.p2Points += 3
-                    this.clean(500)
+                    this.clean(2000)
                 }else if(this.game.typeTruco == "vale4Accept"){
                     this.game.checkVictoryField[0] == "P1" ? this.game.p1Points += 4 : this.game.p2Points += 4
-                    this.clean(500)
+                    this.clean(2000)
                 }
             }else if(this.game.p1Round == 2 || this.game.p2Round == 2){
                 if(this.game.typeTruco == "nada"){
                     this.game.p1Round == 2 ? this.game.p1Points += 1 : this.game.p2Points += 1
-                    this.clean(500)
+                    this.clean(2000)
                 }else if(this.game.typeTruco == "trucoAccept"){
                     this.game.p1Round == 2 ? this.game.p1Points += 2 : this.game.p2Points += 2
-                    this.clean(500)
+                    this.clean(2000)
                 }else if(this.game.typeTruco == "reTrucoAccept"){
                     this.game.p1Round == 2 ? this.game.p1Points += 3 : this.game.p2Points += 3
-                    this.clean(500)
+                    this.clean(2000)
                 }else if(this.game.typeTruco == "vale4Accept"){
                     this.game.p1Round == 2 ? this.game.p1Points += 4 : this.game.p2Points += 4
-                    this.clean(500)
+                    this.clean(2000)
                 }
             }
         },
@@ -1307,41 +1311,42 @@ const app = Vue.createApp({
         },
         botProgram(){
             console.log(this.count);
-            if(this.playerOne.cardHand.length >= 1 && this.field.length <= 1 && this.botPlayer.botStart == true){
-                if(!this.game.p1Turn && this.botPlayer.envidoStatus == true && this.botPlayer.trucoStatus == true){
-                    if(this.playerOne.cardHand.length == 3){
-                        if(this.botPlayer.decisionEnvido <=5 && this.game.mano == "P1"){
-                            this.selectCard(this.playerOne.cardHand[0], this.playerOne)
-                        }else if(this.botPlayer.decisionEnvido >=5 && this.game.mano == "P1"){
-                            this.selectCard(this.playerOne.cardHand[2], this.playerOne)
-                        }else{
-                            let card = this.playerOne.cardHand.filter((card) => card.value > this.field[0][0].value)
-                            if(card.length > 0){
-                                this.selectCard(card[0], this.playerOne)
-                            }else{
-                                this.selectCard(this.playerOne.cardHand[0], this.playerOne)
-                            }
-                        }
-                    }else if(this.playerOne.cardHand.length == 2){
-                        if(this.game.checkVictoryField[0] == "P2" || this.game.checkVictoryField[0] == "E"){
-                            this.selectCard(this.playerOne.cardHand[1], this.playerOne)
-                        }else if(this.game.checkVictoryField[0] == "P1"){
-                            if(this.botPlayer.decisionEnvido <=5){
-                                this.selectCard(this.playerOne.cardHand[0], this.playerOne)
-                            }else if(this.botPlayer.decisionEnvido >=5){
-                                this.selectCard(this.playerOne.cardHand[1], this.playerOne)
-                            }
-                        }else{
-                            let card = this.playerOne.cardHand.filter((card) => card.value > this.field[0][0].value)
-                            if(card.length > 0){
-                                this.selectCard(card[0], this.playerOne)
-                            }else{
-                                this.selectCard(this.playerOne.cardHand[0], this.playerOne)
-                            }
-                        }
-                    }else if(this.playerOne.cardHand.length == 1){
+            if(this.playerOne.cardHand.length >= 1 && this.field.length <= 1 && this.botPlayer.botStart == true && !this.game.p1Turn && this.botPlayer.envidoStatus == true && this.botPlayer.trucoStatus == true){
+                setTimeout(() => {
+                    this.botPlayer.play = true
+                }, 2000);
+                if(this.playerOne.cardHand.length == 3 && this.botPlayer.play){
+                    if(this.botPlayer.decisionEnvido <=5 && this.game.mano == "P1"){
                         this.selectCard(this.playerOne.cardHand[0], this.playerOne)
+                    }else if(this.botPlayer.decisionEnvido >=5 && this.game.mano == "P1"){
+                        this.selectCard(this.playerOne.cardHand[2], this.playerOne)
+                    }else{
+                        let card = this.playerOne.cardHand.filter((card) => card.value > this.field[0][0].value)
+                        if(card.length > 0){
+                            this.selectCard(card[0], this.playerOne)
+                        }else{
+                            this.selectCard(this.playerOne.cardHand[0], this.playerOne)
+                        }
                     }
+                }else if(this.playerOne.cardHand.length == 2 && this.botPlayer.play){
+                    if(this.game.checkVictoryField[0] == "P2" || this.game.checkVictoryField[0] == "E"){
+                        this.selectCard(this.playerOne.cardHand[1], this.playerOne)
+                    }else if(this.game.checkVictoryField[0] == "P1"){
+                        if(this.botPlayer.decisionEnvido <=5){
+                            this.selectCard(this.playerOne.cardHand[0], this.playerOne)
+                        }else if(this.botPlayer.decisionEnvido >=5){
+                            this.selectCard(this.playerOne.cardHand[1], this.playerOne)
+                        }
+                    }else{
+                        let card = this.playerOne.cardHand.filter((card) => card.value > this.field[0][0].value)
+                        if(card.length > 0){
+                            this.selectCard(card[0], this.playerOne)
+                        }else{
+                            this.selectCard(this.playerOne.cardHand[0], this.playerOne)
+                        }
+                    }
+                }else if(this.playerOne.cardHand.length == 1 && this.botPlayer.play){
+                    this.selectCard(this.playerOne.cardHand[0], this.playerOne)
                 }
             }
         },
@@ -1421,7 +1426,7 @@ const app = Vue.createApp({
                             this.acceptEnvido(this.playerOne)
                         }else this.denyEnvido()
                     }else if(this.game.typeEnvido == "envidoenvido"){
-                        if(this.botPlayer.decisionEnvido < 6){
+                        if(this.botPlayer.decisionEnvido < 5){
                             this.acceptEnvido(this.playerOne)
                         }else this.denyEnvido()
                     }else if(this.game.typeEnvido == "envidorealenvido"){
@@ -1441,15 +1446,17 @@ const app = Vue.createApp({
                     }else if(this.game.typeEnvido == "realenvido" || this.game.typeEnvido == "faltaenvido"){
                         this.acceptEnvido(this.playerOne)
                     }else if(this.game.typeEnvido == "envidoenvido"){
-                        if(this.botPlayer.decisionEnvido < 6){
+                        if(this.botPlayer.decisionEnvido <= 5){
                             this.acceptEnvido(this.playerOne)
-                        }else this.sayEnvido("envidoenvidoreal", this.playerOne)
+                        }else if(this.botPlayer.decisionEnvido >= 6) {
+                            this.sayEnvido("realenvido", this.playerOne)
+                        }
                     }else this.acceptEnvido(this.playerOne)
                 }else if (this.botPlayer.envido == "muyaltos") {
                     if(this.game.typeEnvido == "envido"){
                         this.sayEnvido("envido",this.playerOne)
                     }else if(this.game.typeEnvido == "envidoenvido"){
-                        this.sayEnvido("envidoenvidoreal", this.playerOne)
+                        this.sayEnvido("realenvido", this.playerOne)
                     }else this.acceptEnvido(this.playerOne)
                 }
             }

@@ -17,11 +17,11 @@
             <div>
                 <div class="cardContainer">
                     <div v-for="cardP1 in playerOne.cardHand">
-                        <button :disabled="game.p1Turn || field.length == 2" @click.prevent="selectCard(cardP1, playerOne)" class="card animate__animated animate__fadeInRight" :class="{cardBlock: game.p1Turn == true}">
+                        <button :disabled="game.p1Turn || field.length == 2" @click.prevent="selectCard(cardP1, playerOne)" class="card card__bot animate__animated animate__fadeInRight" :class="{cardBlock: game.p1Turn == true}">
                             <div class="card__border">
-<!--                                 <p class="number1">{{cardP1.number}}</p> -->
-                                <img src="../img/back.png" alt="imagen-card" class="imageCard">
-<!--                                 <p class="number2">{{cardP1.number}}</p> -->
+                                <p class="number1">{{cardP1.number}}</p>
+                                <img :src="cardP1.img" alt="imagen-card" class="imageCard">
+                                <p class="number2">{{cardP1.number}}</p>
                             </div>
                         </button>
                     </div>
@@ -50,7 +50,7 @@
             </div>
 
             <div class="field">
-                <div v-for="cardField in field" class="card cardField animate__animated" :class="{cardFieldP2: cardField[1].numberP == 2, cardFieldP1: cardField[1].numberP == 1, animate__fadeInUp: cardField[1].numberP == 2, animate__fadeInDown: cardField[1].numberP == 1}">
+                <div v-for="cardField in field" class="card__field cardField animate__animated" :class="{cardFieldP2: cardField[1].numberP == 2, cardFieldP1: cardField[1].numberP == 1, animate__fadeInUp: cardField[1].numberP == 2, animate__fadeInDown: cardField[1].numberP == 1}">
                     <div class="card__border">
                         <p class="number1">{{cardField[0].number}}</p>
                         <img :src="cardField[0].img" alt="imagen-card" class="imageCard">
