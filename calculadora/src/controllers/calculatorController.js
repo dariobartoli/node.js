@@ -1,11 +1,10 @@
 const prompt = require('prompt-sync')()
 const {operator} = require('../services/calculatorServices')
-const readline = require('readline');
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+const fs = require('fs');
+const data = fs.readFileSync('./calculatorRegister.txt', 'utf-8')
+const registers = JSON.parse(data)
 
+console.log(registers);
 
 function validarNumero(valor) {
     // La expresión regular valida que el valor sea un número opcionalmente negativo
@@ -27,15 +26,20 @@ const controllerOperator = (type) =>{
     }
     if(type == "sum"){
         operator(number1, number2, type)
+        registers.push([number1 + " + " + number2 + " = " + (number1+number2)])
     }
     if(type == "res"){
         operator(number1, number2, type)
+        registers.push([number1 + " - " + number2 + " = " + (number1-number2)])
     }
     if(type == "mul"){
         operator(number1, number2, type)
+        registers.push([number1 + " * " + number2 + " = " + (number1*number2)])
     }if(type == "div"){
         operator(number1, number2, type)
+        registers.push([number1 + " / " + number2 + " = " + (number1/number2)])
     }
+    fs.writeFileSync('./calculatorRegister.txt', JSON.stringify(registers))
     console.log('Muchas gracias por utilizar nuestros servicios');
     process.exit(1);
 }
